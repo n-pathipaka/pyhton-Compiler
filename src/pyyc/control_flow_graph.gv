@@ -1,0 +1,12 @@
+// Control Flow Graph
+strict graph {
+	while0 [shape=rectangle]
+	loop0 [shape=rectangle]
+	end0 [shape=rectangle]
+	start -- while0
+	while0 -- loop0
+	while0 -- end0
+	loop0 -- while0
+	loop0 -- end0
+	end0 -- eop
+}

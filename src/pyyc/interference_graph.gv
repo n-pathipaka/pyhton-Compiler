@@ -1,0 +1,161 @@
+// Interference Graph
+strict graph {
+	eax [fillcolor=pink shape=circle style=filled]
+	ecx [fillcolor=orange shape=circle style=filled]
+	edx [fillcolor=green shape=circle style=filled]
+	ebx [fillcolor=yellow shape=circle style=filled]
+	esi [fillcolor=red shape=circle style=filled]
+	edi [fillcolor=purple shape=circle style=filled]
+	tmp_10 [shape=circle style=filled]
+	tmp_9 [shape=circle style=filled]
+	_z [shape=circle style=filled]
+	tmp_8 [shape=circle style=filled]
+	tmp_1 [shape=circle style=filled]
+	tmp_12 [shape=circle style=filled]
+	tmp_2 [shape=circle style=filled]
+	tmp_4 [shape=circle style=filled]
+	tmp_3 [shape=circle style=filled]
+	tmp_5 [shape=circle style=filled]
+	_x [shape=circle style=filled]
+	tmp_6 [shape=circle style=filled]
+	tmp_7 [shape=circle style=filled]
+	tmp_11 [shape=circle style=filled]
+	_y [shape=circle style=filled]
+	tmp_1 [fillcolor=yellow shape=circle style=filled]
+	tmp_2 [fillcolor=red shape=circle style=filled]
+	tmp_7 [fillcolor=purple shape=circle style=filled]
+	tmp_4 [fillcolor=purple shape=circle style=filled]
+	tmp_5 [fillcolor=pink shape=circle style=filled]
+	tmp_11 [fillcolor=purple shape=circle style=filled]
+	tmp_10 [fillcolor=purple shape=circle style=filled]
+	tmp_8 [fillcolor=orange shape=circle style=filled]
+	_y [fillcolor=red shape=circle style=filled]
+	_x [fillcolor=yellow shape=circle style=filled]
+	tmp_9 [fillcolor=orange shape=circle style=filled]
+	tmp_12 [fillcolor=pink shape=circle style=filled]
+	_z [fillcolor=pink shape=circle style=filled]
+	eax -- tmp_7
+	eax -- tmp_4
+	eax -- tmp_3
+	eax -- tmp_6
+	eax -- _x
+	eax -- _y
+	eax -- tmp_2
+	eax -- tmp_1
+	eax -- tmp_11
+	eax -- tmp_10
+	ecx -- tmp_7
+	ecx -- tmp_4
+	ecx -- tmp_3
+	ecx -- tmp_6
+	ecx -- _x
+	ecx -- _y
+	ecx -- tmp_2
+	ecx -- tmp_1
+	ecx -- tmp_11
+	ecx -- tmp_10
+	edx -- tmp_7
+	edx -- tmp_4
+	edx -- tmp_3
+	edx -- tmp_6
+	edx -- _x
+	edx -- _y
+	edx -- tmp_2
+	edx -- tmp_1
+	edx -- tmp_11
+	edx -- tmp_10
+	tmp_10 -- eax
+	tmp_10 -- ecx
+	tmp_10 -- edx
+	tmp_10 -- tmp_1
+	tmp_10 -- tmp_2
+	tmp_9 -- tmp_7
+	tmp_9 -- tmp_5
+	tmp_8 -- tmp_2
+	tmp_8 -- tmp_7
+	tmp_8 -- tmp_4
+	tmp_8 -- tmp_1
+	tmp_8 -- tmp_5
+	tmp_1 -- tmp_4
+	tmp_1 -- tmp_7
+	tmp_1 -- tmp_3
+	tmp_1 -- tmp_6
+	tmp_1 -- _y
+	tmp_1 -- tmp_2
+	tmp_1 -- eax
+	tmp_1 -- ecx
+	tmp_1 -- edx
+	tmp_1 -- tmp_5
+	tmp_1 -- tmp_8
+	tmp_1 -- tmp_11
+	tmp_1 -- tmp_10
+	tmp_12 -- tmp_11
+	tmp_2 -- tmp_7
+	tmp_2 -- tmp_4
+	tmp_2 -- tmp_6
+	tmp_2 -- tmp_3
+	tmp_2 -- tmp_1
+	tmp_2 -- eax
+	tmp_2 -- ecx
+	tmp_2 -- edx
+	tmp_2 -- tmp_5
+	tmp_2 -- tmp_8
+	tmp_2 -- tmp_11
+	tmp_2 -- tmp_10
+	tmp_4 -- eax
+	tmp_4 -- ecx
+	tmp_4 -- edx
+	tmp_4 -- tmp_1
+	tmp_4 -- tmp_2
+	tmp_4 -- tmp_3
+	tmp_4 -- tmp_5
+	tmp_4 -- tmp_6
+	tmp_4 -- tmp_8
+	tmp_3 -- eax
+	tmp_3 -- ecx
+	tmp_3 -- edx
+	tmp_3 -- tmp_1
+	tmp_3 -- tmp_2
+	tmp_3 -- tmp_4
+	tmp_3 -- tmp_7
+	tmp_3 -- tmp_6
+	tmp_5 -- tmp_2
+	tmp_5 -- tmp_7
+	tmp_5 -- tmp_4
+	tmp_5 -- tmp_6
+	tmp_5 -- tmp_1
+	tmp_5 -- tmp_8
+	tmp_5 -- tmp_9
+	_x -- eax
+	_x -- ecx
+	_x -- edx
+	tmp_6 -- eax
+	tmp_6 -- ecx
+	tmp_6 -- edx
+	tmp_6 -- tmp_1
+	tmp_6 -- tmp_2
+	tmp_6 -- tmp_3
+	tmp_6 -- tmp_5
+	tmp_6 -- tmp_4
+	tmp_6 -- tmp_7
+	tmp_7 -- eax
+	tmp_7 -- ecx
+	tmp_7 -- edx
+	tmp_7 -- tmp_1
+	tmp_7 -- tmp_2
+	tmp_7 -- tmp_3
+	tmp_7 -- tmp_5
+	tmp_7 -- tmp_6
+	tmp_7 -- tmp_8
+	tmp_7 -- tmp_9
+	tmp_11 -- eax
+	tmp_11 -- ecx
+	tmp_11 -- edx
+	tmp_11 -- tmp_1
+	tmp_11 -- tmp_2
+	tmp_11 -- tmp_12
+	_y -- eax
+	_y -- ecx
+	_y -- edx
+	_y -- tmp_1
+}

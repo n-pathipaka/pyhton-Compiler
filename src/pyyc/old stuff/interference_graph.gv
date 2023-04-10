@@ -1,0 +1,53 @@
+// Interference Graph
+strict graph {
+	eax [fillcolor=pink shape=circle style=filled]
+	ecx [fillcolor=orange shape=circle style=filled]
+	edx [fillcolor=green shape=circle style=filled]
+	ebx [fillcolor=yellow shape=circle style=filled]
+	esi [fillcolor=red shape=circle style=filled]
+	edi [fillcolor=purple shape=circle style=filled]
+	tmp3 [shape=circle style=filled]
+	tmp2 [shape=circle style=filled]
+	y [shape=circle style=filled]
+	tmp0 [shape=circle style=filled]
+	x [shape=circle style=filled]
+	w [shape=circle style=filled]
+	z [shape=circle style=filled]
+	tmp1 [shape=circle style=filled]
+	x [fillcolor=yellow shape=circle style=filled]
+	y [fillcolor=red shape=circle style=filled]
+	z [fillcolor=pink shape=circle style=filled]
+	w [fillcolor=orange shape=circle style=filled]
+	tmp3 [fillcolor=orange shape=circle style=filled]
+	tmp2 [fillcolor=pink shape=circle style=filled]
+	tmp0 [fillcolor=pink shape=circle style=filled]
+	tmp1 [fillcolor=pink shape=circle style=filled]
+	eax -- x
+	eax -- y
+	ecx -- x
+	ecx -- y
+	edx -- x
+	edx -- y
+	tmp3 -- z
+	tmp2 -- y
+	y -- x
+	y -- eax
+	y -- ecx
+	y -- edx
+	y -- tmp2
+	tmp0 -- x
+	x -- eax
+	x -- ecx
+	x -- edx
+	x -- tmp0
+	x -- y
+	x -- tmp1
+	x -- z
+	x -- w
+	w -- x
+	w -- z
+	z -- x
+	z -- w
+	z -- tmp3
+	tmp1 -- x
+}
