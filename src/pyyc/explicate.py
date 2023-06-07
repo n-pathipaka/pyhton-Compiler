@@ -11,7 +11,7 @@ class Explicate:
         self.exp_ast = Module([], [])
         self.needs_exp = [BinOp, Constant, UnaryOp, BoolOp, Compare, List, Dict, Subscript]
         self.func_exp = ['int']
-        self.has_body = [If, While]
+        self.has_body = [If, While, FunctionDef]
         
     def explicate(self, flattened_ast):
         print('----- explicate -----')
@@ -32,7 +32,8 @@ class Explicate:
             body = n.body
             n.body = []
             ##print(ast.dump(n, indent=4))
-            n.test = Call(Name('is_true', Load()), [ Name(id=n.test.id, ctx=Load())])
+            if(hasattr(n, 'test')):
+                n.test = Call(Name('is_true', Load()), [ Name(id=n.test.id, ctx=Load())])
             self.exp_ast = n
             for node in body:
                 self.exp(node)
@@ -48,7 +49,7 @@ class Explicate:
         elif isinstance(n, Assign):
             if self.check_instances(n.value, self.needs_exp):
                 self.exp(n.value, n.targets[0].id, n)
-            elif isinstance(n.value, Call) and n.value.func.id in self.func_exp:
+            elif isinstance(n.value, Call):# and n.value.func.id in self.func_exp:
                 self.exp(n.value, n.targets[0].id, n)
             elif isinstance(n.targets[0], Subscript):
                 self.exp(n.targets[0], parent=n, weird=True)
@@ -86,11 +87,20 @@ class Explicate:
             if n.func.id in self.func_exp and isinstance(n.args[0], Name):
                 self.unbox_func(var, n.func.id, n.args[0].id)
                 return
+            '''
             if n.func.id == 'print' and isinstance(n.args[0], Constant):
                 target = self.make_tmp()
                 self.box_constant(target, n.args[0].value)
                 n.args[0] = Name(target, Load())
                 parent.value = n
+            '''
+                
+            for i in range(len(n.args)):
+                if isinstance(n.args[i], Constant):
+                    target = self.make_tmp()
+                    self.box_constant(target, n.args[i].value)
+                    n.args[i] = Name(target, Load())
+                    parent.value = n
             self.exp_ast.body.append(parent)
         elif isinstance(n, BoolOp):
             if isinstance(n.values[0], Constant) and isinstance(n.values[1], Constant):
@@ -151,7 +161,13 @@ class Explicate:
                 self.set_subscript(n.value, n.slice, parent.value)
             else:
                 self.get_subscript(var, n.value, n.slice)
+        elif isinstance(n, Return):
+            if isinstance(n.value, Constant):
+                self.append_code('return box_int(' + str(n.value.value) + ')')
+            else:
+                self.exp_ast.body.append(n)
         else:
+            print('***** da f*** is this *****')
             print(ast.dump(n, indent=4))
             self.exp_ast.body.append(n)
             

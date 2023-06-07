@@ -9,6 +9,11 @@ class Liveness():
     def analyze(self, control_graph):
         print('----- running liveness analysis -----')
         queue = [control_graph['eop']]
+        for node in control_graph.keys():
+            if len(control_graph[node].children) == 0:
+                queue.append(control_graph[node])
+        print('----- queue -----')
+        print(queue)
         while len(queue) != 0:
             # remove from queue
             node = queue.pop(0)
@@ -93,7 +98,17 @@ class Liveness():
                     liveness_list.append(current_liveness)
                 else:
                     if len(instruction) == 4:
+                        #print("***** instruction len 4 *****")
+                        #print(instruction)
                         current_liveness = current_liveness.union(set() if instruction[2][0] == '$' else set([instruction[2]])) - set([instruction[3]])
+                        liveness_list.append(current_liveness)
+                    elif len(instruction) > 2:
+                        add = []
+                        if len(instruction) > 3:
+                            for instruct in instruction[2:-2]:
+                                if instruct[0] != '$':
+                                    add.append(instruct)
+                        current_liveness = current_liveness.union(set(add)) - set([instruction[-1]])
                         liveness_list.append(current_liveness)
                     else:
                         liveness_list.append(current_liveness)
@@ -101,6 +116,8 @@ class Liveness():
                 # remove %al
                     current_liveness = current_liveness - set([instruction[1]])
                     liveness_list.append(current_liveness)
+            elif instruction[0] == 'ret':
+                current_liveness = current_liveness.union(set([instruction[1]]))
             else:
                 print('***** instruction %s not in liveness *****' % (instruction[0]))
         return liveness_list

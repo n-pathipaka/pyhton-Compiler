@@ -28,20 +28,23 @@ class ToIRConverter():
         self.functions_one_out = ['eval', 'create_dict']
         self.functions_three_arg = ['set_subscript']
 
+
     ## it is hard to create all the objects, so instead we will just do it for call functions. 
     def create_call_func(self, indent, func_id, args, rv):
         argsList = []
-        rl = []
         for arg in args:
             argsList.append(self.convert(arg))
-        for r in rv:
-            rl.append(r)
 
-        f = CallFunction(argsList, rl)
+        if len(argsList) > 0:
+            argsList[0] = ', ' + argsList[0]
+        #f = CallFunction(argsList, rl)
         ## for now just do how it was processing 
+        rl = ''
+        if rv:
+            rl = ', ' + rv
         self.intermediate.append(
             indent +
-            'call ' + func_id + ', ' + ', '.join(rl) +  ', '.join(argsList) + ', ' + pickle.dumps(f)
+            'call ' + func_id + ', '.join(argsList) + rl
         )
         
     def python_to_IR(self, python_ast):
@@ -124,8 +127,9 @@ class ToIRConverter():
             elif n.func.id == 'int':
                 return self.convert(n.args[0], var)
             else:
-                print(ast.dump(n, indent=4))
-                raise Exception('***** Error: unrecognized function id convert *****')
+                self.create_call_func(self.indent, n.func.id, n.args, var)
+                #print(ast.dump(n, indent=4))
+                #raise Exception('***** Error: unrecognized function id convert *****')
         # uhg, was is not a unary op
         # just, if it's not do dumb nonsense, else be normal
         elif isinstance(n, UnaryOp):
@@ -353,6 +357,22 @@ class ToIRConverter():
                 'end' + str(old_num) + ':'
             )
             self.indent = old_indent
+        elif isinstance(n, FunctionDef):
+            self.intermediate.append(
+                self.indent + 'def ' + n.name)
+            old_indent = self.indent
+            self.indent += '\t'
+            for i in range(len(n.args.args)):
+                self.intermediate.append(
+                    self.indent +
+                    'movl +' + str((i+1)*4+4) +
+                    '(%ebp), ' + n.args.args[i].arg
+                )
+            for node in n.body:
+                self.convert(node)
+            self.indent = old_indent
+        elif isinstance(n, Return):
+            self.intermediate.append(self.indent + 'ret ' + self.convert(n.value))
         # end of p0a
         else:
             print(n)

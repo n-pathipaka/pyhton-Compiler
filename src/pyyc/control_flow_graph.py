@@ -80,6 +80,20 @@ class cfg():
                 current_node = None
             # else it's just a normal line so put that line
             # into this block
+            elif split_line[0] == 'def':
+                name = split_line[1].replace('\t','')
+                new_node = None
+                if not name in self.graph.keys():
+                    new_node = Node(name)
+                    self.graph[name] = new_node
+                    if not self.github:
+                        self.dot.node(name, shape='rectangle')
+                else:
+                    new_node = self.graph[name]
+                current_node = name
+            elif split_line[0] == 'ret':
+                self.graph[current_node].add_line(line)
+                current_node = 'start'
             else:
                 self.graph[current_node].add_line(line)
         # make an end node so we know where to start with liveness

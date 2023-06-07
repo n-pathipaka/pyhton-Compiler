@@ -70,11 +70,15 @@ class InterferenceGraph:
                     self.graph.add_edge('eax', liveness_list[k+1][i])
                     self.graph.add_edge('ecx', liveness_list[k+1][i])
                     self.graph.add_edge('edx', liveness_list[k+1][i])
+                    for instruct in instruction[2:]:
+                        self.graph.add_edge(instruct, liveness_list[k+1][i])
+                    '''
                     self.graph.add_edge(instruction[2], liveness_list[k+1][i])
                     if len(instruction) >= 4:
                         self.graph.add_edge(instruction[3], liveness_list[k+1][i])
                     if len(instruction) >= 5:
                         self.graph.add_edge(instruction[4], liveness_list[k+1][i])
+                    '''
             elif instruction[0] == 'sete' or instruction[0] == 'setne':
                 for i in range(len(liveness_list[k+1])):
                     self.graph.add_edge('eax', liveness_list[k+1][i])
@@ -91,6 +95,10 @@ class InterferenceGraph:
             elif instruction[0] == 'neg':
                 for i in range(len(liveness_list[k+1])):
                     self.graph.add_edge(instruction[1], liveness_list[k+1][i])
+            elif instruction[0] == 'ret':
+                pass
+                #for i in range(len(liveness_list[k+1])):
+                #    self.graph.add_edge('eax', liveness_list[k+1][i])
             else:
                 print('***** instruction not recognized *****')
                 print(instruction)

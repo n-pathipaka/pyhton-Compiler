@@ -24,6 +24,7 @@ class Flatten:
         # TODO: I think you can add eval and input and it'll just work
         self.dont_flatten_args = []
         # consider adding a does something expr, add print
+        self.functions = []
         
     def flatten(self, tree):
         print("----- flattening -----")
@@ -72,6 +73,8 @@ class Flatten:
             # TODO: if add other things redo this
             if isinstance(n.value, Call):
                 if n.value.func.id == 'print' or n.value.func.id == 'set_subscript' or n.value.func.id == 'TypeError':
+                    self.flattened_program.append(self.indent + self.make_flattened_prog(n.value))
+                elif not n.value.func.id in self.reserved_names:
                     self.flattened_program.append(self.indent + self.make_flattened_prog(n.value))
         # return the constant
         elif isinstance(n, Constant):
@@ -274,6 +277,36 @@ class Flatten:
         # end of p0a
         elif isinstance(n, Is):
             return ' is '
+        elif isinstance(n, FunctionDef):
+            old_program = self.flattened_program
+            self.flattened_program = []
+            line = 'def _' + n.name + '('
+            for arg in n.args.args:
+                line += self.make_flattened_prog(arg) + ', '
+            if len(n.args.args) > 0:
+                line = line[:-2] + '):'
+            else:
+                line += '):'
+            self.flattened_program.append(self.indent + line)
+            old_indent = self.indent
+            self.indent += '\t'
+            for node in n.body:
+                self.make_flattened_prog(node)
+            self.indent = old_indent
+            self.flattened_program += old_program
+        elif isinstance(n, Return):
+            line = 'return '
+            if n.value:
+                if self.check_instances(n.value):
+                    line += self.make_temp(n.value)
+                else:
+                    line += self.make_flattened_prog(n.value)
+            else:
+                line += '0'
+            self.flattened_program.append(self.indent + line)
+        elif isinstance(n, ast.arg):
+            self.variables.add(n.arg)
+            return n.arg
         else:
             print(ast.dump(n, indent=4))
             raise Exception('***** Error: unrecognized AST node *****')
@@ -434,6 +467,8 @@ class Flatten:
                 node.id = "_" + node.id
             if isinstance(node, Constant) and node.value in [True, False]:
                 node.value = 0 if node.value == False else 1
+            if isinstance(node, ast.arg):
+                node.arg = '_' + node.arg
     
     def check_instances(self, n):
         for instance in self.flatten_instances:

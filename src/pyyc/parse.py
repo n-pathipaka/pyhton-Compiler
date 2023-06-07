@@ -20,11 +20,12 @@ class Parser:
     def parse_string(self, string):
         # call ast.parse
         # TODO: replace with our own for ec
-        tree = ast.parse(string)
         # print stuff for debugging
         if self.print_prog:
             print("----- program -----")
             print(string)
+        tree = ast.parse(string)
+        
         if self.print_tree:
             print("----- ast -----")
             print(ast.dump(tree, indent=4))

@@ -4,11 +4,14 @@ class x86_File():
     
     def print_file(self, x86, filename):
         print("----- writing file -----")
+        
         final_prog = ''
-        final_prog += '.globl main\n'
-        final_prog += 'main:\n\t'
+        #final_prog += '.globl main\n'
+        #final_prog += 'main:\n\t'
         for line in x86:
-            final_prog += line + '\n\t'
+            #print(line)
+            final_prog += line + '\n' #+ '\n\t'
+        
         with open(filename.replace('.py', '.s'), 'w') as f:
             f.write(final_prog)
         if self.print_ass:

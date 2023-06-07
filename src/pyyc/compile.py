@@ -3,7 +3,8 @@ import ast
 from ast import *
 
 from parse import Parser
-from uniqufy import functionScope
+from uniqufy import uniquify_vars
+from heapify import Heapify
 from flatten import Flatten
 from explicate import Explicate
 from convert import ToIRConverter
@@ -18,17 +19,21 @@ from print_x86 import x86_File
 # uploading to github (so you don't have to comment stuff)
 github = True
 # print the original file contents
-print_original_file = False
+print_original_file = True
 # print the original ast from file
-print_original_ast = False
+print_original_ast = True
 # print the flattened ast
 print_flattened_ast = False
 # print the flattened program
-print_flattened_prog = False
+print_flattened_prog = True
+# print the uniqfy stuff
+print_uniqufy_asts = True
+# print heap stuff
+print_heapify_ast = False
 # print explicate
 print_explicate_stuff = False
 # print the IR
-print_x86_IR = False
+print_x86_IR = True
 # output control flow graph to pdf
 output_cfg = False
 # display liveness analysis
@@ -40,9 +45,9 @@ print_spill_info = False
 # print variable definitions
 print_var_homes = False
 # output final interference
-print_final_IR = False
+print_final_IR = True
 # show the assembly in console
-print_assembly = False
+print_assembly = True
 
 class Compile:
     def compile(self, filename):
@@ -52,11 +57,13 @@ class Compile:
         parser = Parser(print_original_file, print_original_ast)
         file_ast = parser.parse_file(filename)
 
-        uniqfy = functionScope()
-        uniqfy.find_func_scope(file_ast)
+        uniquified_ast, functions = uniquify_vars(file_ast, print_uniqufy_asts)
+        file_ast = uniquified_ast
+        heapify = Heapify(print_heapify_ast, functions)
+        heapified_ast = heapify.heapify(file_ast)
         # flatten ast to new ast
         flatten = Flatten(print_flattened_ast, print_flattened_prog)
-        flattened_ast = flatten.flatten(file_ast)
+        flattened_ast = flatten.flatten(heapified_ast)
         # explicate
         explicator = Explicate(print_explicate_stuff)
         explicate_ast = explicator.explicate(flattened_ast)
